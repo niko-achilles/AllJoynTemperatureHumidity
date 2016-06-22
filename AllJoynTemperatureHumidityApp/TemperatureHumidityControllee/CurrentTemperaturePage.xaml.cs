@@ -42,6 +42,11 @@ namespace TemperatureHumidityControllee
             this.deviceItem = (DeviceItem)e.Parameter;
             base.OnNavigatedTo(e);
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.GoBack();
+        }
     }
 
     

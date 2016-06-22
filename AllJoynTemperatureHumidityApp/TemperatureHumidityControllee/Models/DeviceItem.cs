@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TemperatureHumidityControllee.Controllees.Helpers;
+﻿// ****************************************************************************
+// <author>Nikolaos Kokkinos</author> 
+// <email>nik.kokkinos@windowslive.com</email> 
+// <date>22.06.2016</date>  
+// <web>http://nikolaoskokkinos.wordpress.com/</web> 
+// **************************************************************************** 
+
 using Windows.Devices.AllJoyn;
 
 namespace TemperatureHumidityControllee.Models

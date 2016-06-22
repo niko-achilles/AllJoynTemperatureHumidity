@@ -20,41 +20,23 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-
-using TemperatureHumidityControllee.Controllees.Helpers;
-using TemperatureHumidityControllee.Controllees;
-using Windows.Devices.AllJoyn;
-using TemperatureHumidityControllee.Services;
-using TemperatureHumidityControllee.Models;
-
-
-
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
+// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace TemperatureHumidityControllee
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class CurrentHumidityPage : Page
     {
-        public MainPage()
+        public CurrentHumidityPage()
         {
             this.InitializeComponent();
         }
 
-        private void GridView_ItemClick(object sender, ItemClickEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            DeviceItem item = e.ClickedItem as DeviceItem; 
-            if (item.AboutData.DefaultAppName.Contains("Temperature"))
-            {
-                this.Frame.Navigate(typeof(CurrentTemperaturePage));
-            }
-            else if (item.AboutData.DefaultAppName.Contains("Humidity"))
-            {
-                this.Frame.Navigate(typeof(CurrentHumidityPage));
-            }
-          
+            this.Frame.GoBack();
         }
     }
 }

@@ -99,9 +99,13 @@
     <Compile Include="BootStrapper.cs" />
     <Compile Include="Controllees\Helpers\AllJoynAboutDataBuilder.cs" />
     <Compile Include="Controllees\Helpers\AppVersion.cs" />
+    <Compile Include="Controllees\Helpers\CurrentHumidityBusAttachment.cs" />
     <Compile Include="Controllees\Helpers\CurrentTemperatureBusAttachment.cs" />
     <Compile Include="Controllees\Helpers\IAboutData.cs" />
-    <Compile Include="Controllees\HumidityControllee.cs" />
+    <Compile Include="Controllees\CurrentHumidityControllee.cs" />
+    <Compile Include="CurrentHumidityPage.xaml.cs">
+      <DependentUpon>CurrentHumidityPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CurrentTemperaturePage.xaml.cs">
       <DependentUpon>CurrentTemperaturePage.xaml</DependentUpon>
     </Compile>
@@ -142,6 +146,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="CurrentHumidityPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="CurrentTemperaturePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

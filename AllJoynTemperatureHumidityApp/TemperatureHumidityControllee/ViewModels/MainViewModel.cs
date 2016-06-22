@@ -13,6 +13,7 @@ namespace TemperatureHumidityControllee.ViewModels
     public class MainViewModel
     {
         public CurrentTemperatureViewModel CurrentTemperatureViewModel { get; private set; }
+        public CurrentHumidityViewModel CurrentHumidityViewModel { get; private set; }
 
         public ObservableCollection<DeviceItem> Items
         {
@@ -20,16 +21,23 @@ namespace TemperatureHumidityControllee.ViewModels
             get;
         }
 
-        public MainViewModel(CurrentTemperatureViewModel currentTemperatureViewModel)
+        public MainViewModel(CurrentTemperatureViewModel currentTemperatureViewModel, CurrentHumidityViewModel currentHumidityViewModel)
         {
-            this.CurrentTemperatureViewModel = currentTemperatureViewModel;
-            Items = new ObservableCollection<DeviceItem>();
-            if (this.CurrentTemperatureViewModel != null)
+            if (currentTemperatureViewModel == null && currentHumidityViewModel==null)
             {
-                Items.Add(new DeviceItem(
-                    this.CurrentTemperatureViewModel.CurrentTemepratureControllee.CurrentTemperatureBusAttachment.AboutData)
-                    );
+                throw new System.ArgumentNullException("MainViewModel depens on CurrentTemperatureViewModel and CurrentHumidityViewModel");
             }
+            this.CurrentTemperatureViewModel = currentTemperatureViewModel;
+            this.CurrentHumidityViewModel = currentHumidityViewModel;
+
+            Items = new ObservableCollection<DeviceItem>()
+            {
+                new DeviceItem(
+                    this.CurrentTemperatureViewModel.CurrentTemepratureControllee.CurrentTemperatureBusAttachment.AboutData),
+                new DeviceItem(
+                    this.CurrentHumidityViewModel.CurrentHumidityControllee.CurrentHumidityBusAttachment.AboutData)
+            };
+           
             
         }
     }

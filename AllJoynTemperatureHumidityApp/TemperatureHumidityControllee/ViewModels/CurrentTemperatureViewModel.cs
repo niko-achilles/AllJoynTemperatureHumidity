@@ -34,7 +34,7 @@ namespace TemperatureHumidityControllee.ViewModels
         public CurrentTemperatureViewModel(CurrentTemperatureControllee currentTemperatureControllee, 
                                             CurrentTemperature currentTemperatureModel)
         {
-            if (currentTemperatureControllee==null || currentTemperatureModel==null)
+            if (currentTemperatureControllee==null && currentTemperatureModel==null)
             {
                 throw new ArgumentNullException("CurrentTemperatureViewModel is depended from CurrentTemperatureControllee, CurrentTemperature-Model. Values are null");
             }

@@ -41,4 +41,20 @@ namespace TemperatureHumidityControllee.Controllees.Helpers
         public System.String SoftwareVersion { get; set; }
         public Uri SupportUrl { get; set; }
     }
+
+    public class CurrentHumidityAboutData : IAboutData
+    {
+        public Guid AppId { get; set; }
+        public IDictionary<System.String, System.String> AppNames { get; }
+        public DateTimeOffset? DateOfManufacture { get; set; }
+        public System.String DefaultAppName { get; set; }
+        public System.String DefaultDescription { get; set; }
+        public System.String DefaultManufacturer { get; set; }
+        public IDictionary<System.String, System.String> Descriptions { get; }
+        public System.Boolean IsEnabled { get; set; }
+        public IDictionary<System.String, System.String> Manufacturers { get; }
+        public System.String ModelNumber { get; set; }
+        public System.String SoftwareVersion { get; set; }
+        public Uri SupportUrl { get; set; }
+    }
 }

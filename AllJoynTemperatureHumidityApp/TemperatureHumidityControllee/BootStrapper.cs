@@ -14,6 +14,7 @@ using TemperatureHumidityControllee.Services;
 using TemperatureHumidityControllee.ViewModels;
 using Windows.Devices.AllJoyn;
 using Autofac;
+using org.alljoyn.SmartSpaces.Environment.CurrentHumidity;
 
 namespace TemperatureHumidityControllee
 {
@@ -46,12 +47,25 @@ namespace TemperatureHumidityControllee
                 }
                 else
                 {
-                    return new MainViewModel(null);
+                    return new MainViewModel(null, null);
                 }
             }
         }
 
-        //TODO HumidityViewModel
+        public CurrentHumidityViewModel CurrentHumidityViewModel
+        {
+            get
+            {
+                if (this.container != null)
+                {
+                    return container.Resolve<CurrentHumidityViewModel>();
+                }
+                else
+                {
+                    return new CurrentHumidityViewModel(null, null);
+                }
+            }
+        }
 
         public BootStrapper()
         {
@@ -61,7 +75,10 @@ namespace TemperatureHumidityControllee
             builder.RegisterType<CurrentTemperature>().SingleInstance();
             builder.RegisterType<CurrentTemperatureService>().As<ICurrentTemperatureService>();
 
-            Func<IAboutData> ajCurrentTemperatureAboutData = () =>
+            builder.RegisterType<CurrentHumidity>().SingleInstance();
+            builder.RegisterType<CurrentHumidityService>().As<ICurrentHumidityService>();
+
+            Func<CurrentTemperatureAboutData> ajCurrentTemperatureAboutData = () =>
             {
                 return new AllJoynAboutDataBuilder(new CurrentTemperatureAboutData())
                   .WithAppId(new Guid())
@@ -70,17 +87,35 @@ namespace TemperatureHumidityControllee
                   .WithDefaultManufacturer("Niko & Wido Corp. ")
                   .WithModelNumber("12345")
                   .WithSoftwareVersion(AppVersion.GetAppVersion())
-                  .Build();
+                  .Build() as CurrentTemperatureAboutData;
             };
 
+            Func<CurrentHumidityAboutData> ajCurrentHumidityAboutData = () =>
+            {
+                return new AllJoynAboutDataBuilder(new CurrentHumidityAboutData())
+                  .WithAppId(new Guid())
+                  .WithDefaultAppName("Current Humidity App")
+                  .WithDefaultDescription("This app provides capability to represent current humidity.")
+                  .WithDefaultManufacturer("Niko & Wido Corp. ")
+                  .WithModelNumber("12345")
+                  .WithSoftwareVersion(AppVersion.GetAppVersion())
+                  .Build() as CurrentHumidityAboutData;
+            };
+
+
             builder.RegisterInstance(ajCurrentTemperatureAboutData);
+            builder.RegisterInstance(ajCurrentHumidityAboutData);
 
             builder.RegisterType<AllJoynBusAttachment>().AsSelf();
 
             builder.RegisterType<CurrentTemperatureBusAttachment>().AsSelf();
+            builder.RegisterType<CurrentHumidityBusAttachment>().AsSelf();
 
             builder.RegisterType<CurrentTemperatureControllee>().AsSelf();
             builder.RegisterType<CurrentTemperatureViewModel>().AsSelf();
+
+            builder.RegisterType<CurrentHumidityControllee>().AsSelf();
+            builder.RegisterType<CurrentHumidityViewModel>().AsSelf();
 
             builder.RegisterType<MainViewModel>().AsSelf();
 

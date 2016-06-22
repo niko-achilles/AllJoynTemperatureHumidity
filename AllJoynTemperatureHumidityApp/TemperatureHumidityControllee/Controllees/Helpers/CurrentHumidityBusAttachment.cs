@@ -10,12 +10,12 @@ using Windows.Devices.AllJoyn;
 
 namespace TemperatureHumidityControllee.Controllees.Helpers
 {
-    public class CurrentTemperatureBusAttachment
+    public class CurrentHumidityBusAttachment
     {
-        private Func<CurrentTemperatureAboutData> _aboutDataProvider;
+        private Func<CurrentHumidityAboutData> _aboutDataProvider;
         private Func<AllJoynBusAttachment> _ajBusAttachmentProvider;
 
-        public CurrentTemperatureBusAttachment(Func<CurrentTemperatureAboutData> ajAboutDataProvider, 
+        public CurrentHumidityBusAttachment(Func<CurrentHumidityAboutData> ajAboutDataProvider, 
                                                 Func<AllJoynBusAttachment> ajBusAttachmentProvider)
         {
             this._aboutDataProvider = ajAboutDataProvider;
