@@ -1,0 +1,26 @@
+﻿<Page
+    x:Class="TemperatureHumidityControllee.CurrentTemperaturePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TemperatureHumidityControllee"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    DataContext="{Binding Path=CurrentTemperatureViewModel, Source={StaticResource Bootstrapper}}">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <StackPanel Orientation="Vertical">
+            <TextBlock Text="Current Temperature Page" Style="{ThemeResource TitleTextBlockStyle}" Margin="50"></TextBlock>
+        <StackPanel Orientation="Horizontal">
+                <Button Content="Start Temperature Producer" Margin="50,0,0,0" Command="{Binding StartProducer}"></Button>
+                <Button Content="Stop Temperature Producer" Margin="50,0,0,0" Command="{Binding StopProducer}"></Button>
+                <TextBlock Text="Bus Attachment State: " Style="{ThemeResource BaseTextBlockStyle}" Margin="20,0,0,0"></TextBlock>
+                <TextBlock Text="{Binding CurrentTemepratureControllee.CurrentTemperatureBusAttachmentState}" Margin="20,0,0,0"></TextBlock>
+            
+            </StackPanel>
+
+            <TextBlock Text="Current Temperature is: " Margin="50" Style="{ThemeResource TitleTextBlockStyle}"></TextBlock>
+            <TextBlock Margin="50,0,0,0" Text="{Binding CurrentTemepratureModel.CurrentValue}" Height="205" FontSize="130"></TextBlock>
+        </StackPanel>
+    </Grid>
+</Page>
