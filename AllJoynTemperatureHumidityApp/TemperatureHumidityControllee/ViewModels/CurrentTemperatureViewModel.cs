@@ -7,6 +7,7 @@
 
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Views;
 using System;
 using System.Windows.Input;
 using TemperatureHumidityControllee.Controllees;
@@ -28,6 +29,8 @@ namespace TemperatureHumidityControllee.ViewModels
             get;
             private set;
         }
+
+        public INavigationService NavigationService { get; set; }
 
         public CurrentTemperatureViewModel(CurrentTemperatureControllee currentTemperatureControllee, 
                                             CurrentTemperature currentTemperatureModel)
@@ -62,6 +65,20 @@ namespace TemperatureHumidityControllee.ViewModels
                     this.CurrentTemepratureControllee.StopCurrentTemperatureProducer();
                 });
             }
-        } 
+        }
+
+        private ICommand _goBackCommand;
+        public ICommand GoBackCommand
+        {
+            get
+            {
+                return _goBackCommand ?? (_goBackCommand = new RelayCommand(
+                    () =>
+                    {
+                        this.NavigationService.GoBack(); 
+                    }));
+            }
+        }
+
     }
 }

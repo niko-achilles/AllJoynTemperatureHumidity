@@ -42,19 +42,5 @@ namespace TemperatureHumidityControllee
         {
             this.InitializeComponent();
         }
-
-        private void GridView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            DeviceItem item = e.ClickedItem as DeviceItem; 
-            if (item.AboutData.DefaultAppName.Contains("Temperature"))
-            {
-                this.Frame.Navigate(typeof(CurrentTemperaturePage));
-            }
-            else if (item.AboutData.DefaultAppName.Contains("Humidity"))
-            {
-                this.Frame.Navigate(typeof(CurrentHumidityPage));
-            }
-          
-        }
     }
 }

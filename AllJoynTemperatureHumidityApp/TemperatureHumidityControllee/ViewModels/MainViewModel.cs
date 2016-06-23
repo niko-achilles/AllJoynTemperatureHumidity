@@ -5,6 +5,8 @@
 // <web>http://nikolaoskokkinos.wordpress.com/</web> 
 // **************************************************************************** 
 
+using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Views;
 using System.Collections.ObjectModel;
 using TemperatureHumidityControllee.Models;
 
@@ -20,6 +22,8 @@ namespace TemperatureHumidityControllee.ViewModels
             private set;
             get;
         }
+
+        public INavigationService NavigationService { get; set; }
 
         public MainViewModel(CurrentTemperatureViewModel currentTemperatureViewModel, CurrentHumidityViewModel currentHumidityViewModel)
         {
@@ -39,6 +43,31 @@ namespace TemperatureHumidityControllee.ViewModels
             };
            
             
+        }
+
+        private RelayCommand<DeviceItem> _showDetailsCommand;
+        public RelayCommand<DeviceItem> ShowDetailsCommand
+        {
+            get
+            {
+                return _showDetailsCommand ?? (_showDetailsCommand = new RelayCommand<DeviceItem>(
+                    (deviceItem)=>
+                    {
+                        if (!ShowDetailsCommand.CanExecute(deviceItem))
+                        {
+                            return;
+                        }
+
+                        else if (deviceItem.AboutData.DefaultAppName.Contains("Temperature"))
+                        {
+                            NavigationService.NavigateTo("CurrentTemperaturePage");
+                        }
+                        else if(deviceItem.AboutData.DefaultAppName.Contains("Humidity"))
+                        {
+                            NavigationService.NavigateTo("CurrentHumidityPage");
+                        }
+                    },deviceItem => deviceItem!=null));
+            }
         }
     }
 }

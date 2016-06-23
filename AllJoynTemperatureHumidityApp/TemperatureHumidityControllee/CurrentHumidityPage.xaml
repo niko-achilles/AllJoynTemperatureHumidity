@@ -10,7 +10,7 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel Orientation="Vertical">
             <TextBlock Text="Current Humidity Page" Style="{ThemeResource TitleTextBlockStyle}" Margin="50"></TextBlock>
-            <Button Content="Go Back" Margin="50,0,0,0" Width="220" Click="Button_Click"></Button>
+            <Button Content="Go Back" Margin="50,0,0,0" Width="220" Command="{Binding GoBackCommand}"></Button>
             
             <StackPanel Orientation="Horizontal" Margin="0,50,0,0">
                 <Button Content="Start Humidity Producer" Margin="50,0,0,0" Command="{Binding StartProducer}"></Button>

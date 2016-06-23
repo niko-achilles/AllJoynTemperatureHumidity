@@ -30,23 +30,14 @@ namespace TemperatureHumidityControllee
     /// </summary>
     public sealed partial class CurrentTemperaturePage : Page
     {
-        private DeviceItem deviceItem;
+
 
         public CurrentTemperaturePage()
         {
             this.InitializeComponent();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            this.deviceItem = (DeviceItem)e.Parameter;
-            base.OnNavigatedTo(e);
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.GoBack();
-        }
+        
     }
 
     

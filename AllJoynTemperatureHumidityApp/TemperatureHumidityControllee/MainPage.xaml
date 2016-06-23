@@ -5,6 +5,8 @@
     xmlns:local="using:TemperatureHumidityControllee"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     mc:Ignorable="d"
     DataContext="{Binding Path=MainViewModel, Source={StaticResource Bootstrapper}}">
 
@@ -16,7 +18,7 @@
         <Grid Background="Purple">
             <TextBlock Text="AllJoyn Apps" RequestedTheme="Dark" Margin="60,25,50,25" Style="{StaticResource HeaderTextBlockStyle}"></TextBlock>
         </Grid>
-        <GridView Grid.Row="1" IsItemClickEnabled="True" ItemClick="GridView_ItemClick"
+        <GridView Grid.Row="1" IsItemClickEnabled="True"
                   ItemsSource="{Binding Items}" Padding="50">
             <GridView.ItemTemplate>
                 <DataTemplate>
@@ -32,6 +34,15 @@
                         <TextBlock Grid.Column="1" Margin="4" Text="{Binding DeviceName, Mode=TwoWay}" Style="{StaticResource TitleTextBlockStyle}"></TextBlock>
                         <TextBlock Grid.Column="1" Margin="4" Grid.Row="1" Text="{Binding Manufacturer, Mode=TwoWay}" Style="{StaticResource SubtitleTextBlockStyle}"></TextBlock>
                         <TextBlock Grid.Column="1" Margin="4" Grid.Row="2" Text="{Binding ModelNumber, Mode=TwoWay}" Style="{StaticResource SubtitleTextBlockStyle}"></TextBlock>
+
+                        <i:Interaction.Behaviors>
+                            <core:EventTriggerBehavior EventName="Tapped">
+                                <core:InvokeCommandAction Command="{Binding MainViewModel.ShowDetailsCommand, Source={StaticResource Bootstrapper}}" CommandParameter="{Binding}">
+                                    
+                                </core:InvokeCommandAction>
+                            </core:EventTriggerBehavior>
+                        </i:Interaction.Behaviors>
+                    
                     </Grid>
                 </DataTemplate>
             </GridView.ItemTemplate>

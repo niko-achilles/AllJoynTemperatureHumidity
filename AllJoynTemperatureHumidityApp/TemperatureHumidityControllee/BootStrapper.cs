@@ -15,6 +15,7 @@ using TemperatureHumidityControllee.ViewModels;
 using Windows.Devices.AllJoyn;
 using Autofac;
 using org.alljoyn.SmartSpaces.Environment.CurrentHumidity;
+using GalaSoft.MvvmLight.Views;
 
 namespace TemperatureHumidityControllee
 {
@@ -28,7 +29,10 @@ namespace TemperatureHumidityControllee
             {
                 if (this.container != null)
                 {
-                    return container.Resolve<CurrentTemperatureViewModel>();
+                    var viewmodel = container.Resolve<CurrentTemperatureViewModel>();
+                    viewmodel.NavigationService = container.Resolve<INavigationService>();
+
+                    return viewmodel;
                 }
                 else
                 {
@@ -43,7 +47,9 @@ namespace TemperatureHumidityControllee
             {
                 if (this.container != null)
                 {
-                    return container.Resolve<MainViewModel>();
+                    var viewmodel = container.Resolve<MainViewModel>();
+                    viewmodel.NavigationService = container.Resolve<INavigationService>();
+                    return viewmodel;
                 }
                 else
                 {
@@ -58,7 +64,9 @@ namespace TemperatureHumidityControllee
             {
                 if (this.container != null)
                 {
-                    return container.Resolve<CurrentHumidityViewModel>();
+                    var viewmodel = container.Resolve<CurrentHumidityViewModel>();
+                    viewmodel.NavigationService = container.Resolve<INavigationService>();
+                    return viewmodel;
                 }
                 else
                 {
@@ -110,6 +118,12 @@ namespace TemperatureHumidityControllee
 
             builder.RegisterType<CurrentTemperatureBusAttachment>().AsSelf();
             builder.RegisterType<CurrentHumidityBusAttachment>().AsSelf();
+
+            NavigationService nav = new NavigationService();
+            nav.Configure("CurrentTemperaturePage", typeof(CurrentTemperaturePage));
+            nav.Configure("CurrentHumidityPage", typeof(CurrentHumidityPage));
+
+            builder.RegisterInstance<INavigationService>(nav);
 
             builder.RegisterType<CurrentTemperatureControllee>().AsSelf();
             builder.RegisterType<CurrentTemperatureViewModel>().AsSelf();
