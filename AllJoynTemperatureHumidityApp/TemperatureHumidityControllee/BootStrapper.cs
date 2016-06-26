@@ -13,31 +13,23 @@ using TemperatureHumidityControllee.Models;
 using TemperatureHumidityControllee.Services;
 using TemperatureHumidityControllee.ViewModels;
 using Windows.Devices.AllJoyn;
-using Autofac;
 using org.alljoyn.SmartSpaces.Environment.CurrentHumidity;
 using GalaSoft.MvvmLight.Views;
+using GalaSoft.MvvmLight.Ioc;
+using Microsoft.Practices.ServiceLocation;
+using GalaSoft.MvvmLight;
+using TemperatureHumidityControllee.Design;
+using TemperatureHumidityControllee.Views;
 
 namespace TemperatureHumidityControllee
 {
     public class BootStrapper
     {
-        private IContainer container;
-
         public CurrentTemperatureViewModel CurrentTemperatureViewModel
         {
             get
             {
-                if (this.container != null)
-                {
-                    var viewmodel = container.Resolve<CurrentTemperatureViewModel>();
-                    viewmodel.NavigationService = container.Resolve<INavigationService>();
-
-                    return viewmodel;
-                }
-                else
-                {
-                    return new CurrentTemperatureViewModel(null, null);
-                }
+                return ServiceLocator.Current.GetInstance<CurrentTemperatureViewModel>();
             }
         }
 
@@ -45,16 +37,7 @@ namespace TemperatureHumidityControllee
         {
             get
             {
-                if (this.container != null)
-                {
-                    var viewmodel = container.Resolve<MainViewModel>();
-                    viewmodel.NavigationService = container.Resolve<INavigationService>();
-                    return viewmodel;
-                }
-                else
-                {
-                    return new MainViewModel(null, null);
-                }
+                return ServiceLocator.Current.GetInstance<MainViewModel>();
             }
         }
 
@@ -62,31 +45,38 @@ namespace TemperatureHumidityControllee
         {
             get
             {
-                if (this.container != null)
-                {
-                    var viewmodel = container.Resolve<CurrentHumidityViewModel>();
-                    viewmodel.NavigationService = container.Resolve<INavigationService>();
-                    return viewmodel;
-                }
-                else
-                {
-                    return new CurrentHumidityViewModel(null, null);
-                }
+                return ServiceLocator.Current.GetInstance<CurrentHumidityViewModel>();
             }
         }
 
-        public BootStrapper()
+        static BootStrapper()
         {
 
-            var builder = new ContainerBuilder();
+            ServiceLocator.SetLocatorProvider(() =>SimpleIoc.Default);
 
-            builder.RegisterType<CurrentTemperature>().SingleInstance();
-            builder.RegisterType<CurrentTemperatureService>().As<ICurrentTemperatureService>();
+            if (ViewModelBase.IsInDesignModeStatic)
+            {
+                SimpleIoc.Default.Register<INavigationService, DesignNavigationService>();
+                //regiter here other service that provide data and need to be mocked
+            }
+            else
+            {
+                NavigationService nav = new NavigationService();
+                nav.Configure("CurrentHumidityPage", typeof(CurrentHumidityPage));
+                nav.Configure("CurrentTemperaturePage", typeof(CurrentTemperaturePage));
 
-            builder.RegisterType<CurrentHumidity>().SingleInstance();
-            builder.RegisterType<CurrentHumidityService>().As<ICurrentHumidityService>();
+                SimpleIoc.Default.Register<INavigationService>(() => nav);
 
-            Func<CurrentTemperatureAboutData> ajCurrentTemperatureAboutData = () =>
+                //register here the real implementation of service that have been mocked above in the if statement = true
+            }
+
+            SimpleIoc.Default.Register<CurrentHumidity>();
+            SimpleIoc.Default.Register<ICurrentHumidityService, CurrentHumidityService>();
+
+            SimpleIoc.Default.Register<CurrentTemperature>();
+            SimpleIoc.Default.Register<ICurrentTemperatureService, CurrentTemperatureService>();
+
+            Func<IAboutData> ajCurrentTemperatureAboutData = () =>
             {
                 return new AllJoynAboutDataBuilder(new CurrentTemperatureAboutData())
                   .WithAppId(new Guid())
@@ -95,10 +85,10 @@ namespace TemperatureHumidityControllee
                   .WithDefaultManufacturer("Niko & Wido Corp. ")
                   .WithModelNumber("12345")
                   .WithSoftwareVersion(AppVersion.GetAppVersion())
-                  .Build() as CurrentTemperatureAboutData;
+                  .Build() as IAboutData;
             };
 
-            Func<CurrentHumidityAboutData> ajCurrentHumidityAboutData = () =>
+            Func<IAboutData> ajCurrentHumidityAboutData = () =>
             {
                 return new AllJoynAboutDataBuilder(new CurrentHumidityAboutData())
                   .WithAppId(new Guid())
@@ -107,33 +97,28 @@ namespace TemperatureHumidityControllee
                   .WithDefaultManufacturer("Niko & Wido Corp. ")
                   .WithModelNumber("12345")
                   .WithSoftwareVersion(AppVersion.GetAppVersion())
-                  .Build() as CurrentHumidityAboutData;
+                  .Build() as IAboutData;
             };
 
 
-            builder.RegisterInstance(ajCurrentTemperatureAboutData);
-            builder.RegisterInstance(ajCurrentHumidityAboutData);
+            SimpleIoc.Default.Register<CurrentTemperatureBusAttachment>(() => AllJoynBusAttachmentFactory
+                                                                                .CreateAllJoynBusAttachment<CurrentTemperatureBusAttachment>(ajCurrentTemperatureAboutData(),
+                                                                                () => new AllJoynBusAttachment()));
 
-            builder.RegisterType<AllJoynBusAttachment>().AsSelf();
+            SimpleIoc.Default.Register<CurrentHumidityBusAttachment>(() => AllJoynBusAttachmentFactory
+                                                                                .CreateAllJoynBusAttachment<CurrentHumidityBusAttachment>(ajCurrentHumidityAboutData(),
+                                                                                ()=>new AllJoynBusAttachment()));
 
-            builder.RegisterType<CurrentTemperatureBusAttachment>().AsSelf();
-            builder.RegisterType<CurrentHumidityBusAttachment>().AsSelf();
+            SimpleIoc.Default.Register<CurrentTemperatureControllee>();
+            SimpleIoc.Default.Register<CurrentHumidityControllee>();
 
-            NavigationService nav = new NavigationService();
-            nav.Configure("CurrentTemperaturePage", typeof(CurrentTemperaturePage));
-            nav.Configure("CurrentHumidityPage", typeof(CurrentHumidityPage));
 
-            builder.RegisterInstance<INavigationService>(nav);
+            SimpleIoc.Default.Register<CurrentTemperatureViewModel>();
+            SimpleIoc.Default.Register<CurrentHumidityViewModel>();
 
-            builder.RegisterType<CurrentTemperatureControllee>().AsSelf();
-            builder.RegisterType<CurrentTemperatureViewModel>().AsSelf();
-
-            builder.RegisterType<CurrentHumidityControllee>().AsSelf();
-            builder.RegisterType<CurrentHumidityViewModel>().AsSelf();
-
-            builder.RegisterType<MainViewModel>().AsSelf();
-
-            this.container = builder.Build();
+            SimpleIoc.Default.Register<IAboutData>(() => ajCurrentHumidityAboutData(), "HumidityAboutData");
+            SimpleIoc.Default.Register<IAboutData>(() => ajCurrentTemperatureAboutData(), "TemperatureAboutData");
+            SimpleIoc.Default.Register<MainViewModel>();
         }
 
     }

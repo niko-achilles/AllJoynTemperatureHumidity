@@ -7,15 +7,18 @@
 
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
+using Microsoft.Practices.ServiceLocation;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using TemperatureHumidityControllee.Controllees.Helpers;
 using TemperatureHumidityControllee.Models;
 
 namespace TemperatureHumidityControllee.ViewModels
 {
     public class MainViewModel
     {
-        public CurrentTemperatureViewModel CurrentTemperatureViewModel { get; private set; }
-        public CurrentHumidityViewModel CurrentHumidityViewModel { get; private set; }
+        //public CurrentTemperatureViewModel CurrentTemperatureViewModel { get; private set; }
+        //public CurrentHumidityViewModel CurrentHumidityViewModel { get; private set; }
 
         public ObservableCollection<DeviceItem> Items
         {
@@ -23,26 +26,26 @@ namespace TemperatureHumidityControllee.ViewModels
             get;
         }
 
-        public INavigationService NavigationService { get; set; }
+        public INavigationService _navigationService;
 
-        public MainViewModel(CurrentTemperatureViewModel currentTemperatureViewModel, CurrentHumidityViewModel currentHumidityViewModel)
+        public MainViewModel(INavigationService navService)
         {
-            if (currentTemperatureViewModel == null && currentHumidityViewModel==null)
-            {
-                throw new System.ArgumentNullException("MainViewModel depens on CurrentTemperatureViewModel and CurrentHumidityViewModel");
-            }
-            this.CurrentTemperatureViewModel = currentTemperatureViewModel;
-            this.CurrentHumidityViewModel = currentHumidityViewModel;
 
-            Items = new ObservableCollection<DeviceItem>()
+            if (navService == null)
             {
-                new DeviceItem(
-                    this.CurrentTemperatureViewModel.CurrentTemepratureControllee.CurrentTemperatureBusAttachment.AboutData),
-                new DeviceItem(
-                    this.CurrentHumidityViewModel.CurrentHumidityControllee.CurrentHumidityBusAttachment.AboutData)
-            };
+                throw new System.ArgumentNullException("MainViewModel needs a navigation Service");
+            }
+
+            this._navigationService = navService;
+
            
-            
+            Items = new ObservableCollection<DeviceItem>();
+
+            foreach (var item in ServiceLocator.Current.GetAllInstances<IAboutData>())
+            {
+                Items.Add(new DeviceItem(item));
+            }
+
         }
 
         private RelayCommand<DeviceItem> _showDetailsCommand;
@@ -60,11 +63,11 @@ namespace TemperatureHumidityControllee.ViewModels
 
                         else if (deviceItem.AboutData.DefaultAppName.Contains("Temperature"))
                         {
-                            NavigationService.NavigateTo("CurrentTemperaturePage");
+                            this._navigationService.NavigateTo("CurrentTemperaturePage");
                         }
                         else if(deviceItem.AboutData.DefaultAppName.Contains("Humidity"))
                         {
-                            NavigationService.NavigateTo("CurrentHumidityPage");
+                            this._navigationService.NavigateTo("CurrentHumidityPage");
                         }
                     },deviceItem => deviceItem!=null));
             }

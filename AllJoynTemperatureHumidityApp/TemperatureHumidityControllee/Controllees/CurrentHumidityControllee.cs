@@ -12,13 +12,15 @@ using org.alljoyn.SmartSpaces.Environment.CurrentHumidity;
 using System;
 using TemperatureHumidityControllee.Controllees.Helpers;
 using Windows.Devices.AllJoyn;
+using GalaSoft.MvvmLight.Ioc;
+using Microsoft.Practices.ServiceLocation;
 
 namespace TemperatureHumidityControllee.Controllees
 {
     public class CurrentHumidityControllee:ObservableObject, IDisposable
     {
-        private Func<ICurrentHumidityService> _currentHumidityServiceProvider;
-        private Func<CurrentHumidityBusAttachment> _currentHumidityBusAttachmentProvider;
+
+        private ICurrentHumidityService _currentHumidityService;
 
         private AllJoynBusAttachment _currentHumidityBusAttachment;
         public AllJoynBusAttachment CurrentHumidityBusAttachment
@@ -52,12 +54,11 @@ namespace TemperatureHumidityControllee.Controllees
             }
         }
 
-        public CurrentHumidityControllee(Func<CurrentHumidityBusAttachment> busAttachmentProvider,
-                                            Func<ICurrentHumidityService> serviceProvider)
+        public CurrentHumidityControllee(ICurrentHumidityService service)
         {
 
-            this._currentHumidityBusAttachmentProvider = busAttachmentProvider;
-            this._currentHumidityServiceProvider = serviceProvider;
+            //this.CurrentHumidityBusAttachment = busAttachment.AllJoynBusAttachment;
+            this._currentHumidityService = service;
 
             Messenger.Default.Register<string>(this, m => this.MessageFromModel(m));
 
@@ -66,7 +67,7 @@ namespace TemperatureHumidityControllee.Controllees
 
         }
 
-    
+
 
         private void MessageFromModel(string message)
         {
@@ -101,7 +102,9 @@ namespace TemperatureHumidityControllee.Controllees
 
         public void InitializeBusAttachment()
         {
-            this.CurrentHumidityBusAttachment = this._currentHumidityBusAttachmentProvider().GetAllJoynBusAttachment();
+            this.CurrentHumidityBusAttachment = ServiceLocator.Current.GetInstance<CurrentHumidityBusAttachment>()
+                                                       .AllJoynBusAttachment;
+
             this.CurrentHumidityBusAttachment.StateChanged += OnCurrentTemperatureBusAttachmentStateChanged;
         }
 
@@ -115,7 +118,7 @@ namespace TemperatureHumidityControllee.Controllees
             //this._currentHumidityProducer.SessionMemberAdded += OnCurrentvProducerMemberAdded;
             //this._currentHumidityProducer.SessionMemberRemoved += OnCurrentHumidityProducerMemberRemoved;
 
-            this._currentHumidityProducer.Service = this._currentHumidityServiceProvider();
+            this._currentHumidityProducer.Service = this._currentHumidityService;
 
 
 

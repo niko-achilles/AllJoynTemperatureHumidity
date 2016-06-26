@@ -10,32 +10,32 @@ using Windows.Devices.AllJoyn;
 
 namespace TemperatureHumidityControllee.Controllees.Helpers
 {
-    public class CurrentTemperatureBusAttachment
+    public class CurrentTemperatureBusAttachment:IConfigureAllJoynBusAttachment
     {
-        private Func<CurrentTemperatureAboutData> _aboutDataProvider;
-        private Func<AllJoynBusAttachment> _ajBusAttachmentProvider;
 
-        public CurrentTemperatureBusAttachment(Func<CurrentTemperatureAboutData> ajAboutDataProvider, 
-                                                Func<AllJoynBusAttachment> ajBusAttachmentProvider)
+
+        public CurrentTemperatureBusAttachment()
+        {}
+
+        public AllJoynBusAttachment AllJoynBusAttachment
         {
-            this._aboutDataProvider = ajAboutDataProvider;
-            this._ajBusAttachmentProvider = ajBusAttachmentProvider; 
+            get;
+            set;
         }
 
-        public AllJoynBusAttachment GetAllJoynBusAttachment()
+        public void ConfigureAllJoynBusAttachment(IAboutData aboutData)
         {
-            var aboutData = this._aboutDataProvider();
-            var busAttachment = this._ajBusAttachmentProvider();
+            if (this.AllJoynBusAttachment == null)
+            {
+                throw new InvalidOperationException("AllJoynBusAttachment is null");
+            }
 
-            busAttachment.AboutData.AppId = aboutData.AppId;
-            busAttachment.AboutData.DefaultAppName = aboutData.DefaultAppName;
-            busAttachment.AboutData.DefaultManufacturer = aboutData.DefaultManufacturer;
-            busAttachment.AboutData.ModelNumber = aboutData.ModelNumber;
-            busAttachment.AboutData.DefaultDescription = aboutData.DefaultDescription;
-            busAttachment.AboutData.SoftwareVersion = aboutData.SoftwareVersion;
-
-            return busAttachment;
-
+            AllJoynBusAttachment.AboutData.AppId = aboutData.AppId;
+            AllJoynBusAttachment.AboutData.DefaultAppName = aboutData.DefaultAppName;
+            AllJoynBusAttachment.AboutData.DefaultManufacturer = aboutData.DefaultManufacturer;
+            AllJoynBusAttachment.AboutData.ModelNumber = aboutData.ModelNumber;
+            AllJoynBusAttachment.AboutData.DefaultDescription = aboutData.DefaultDescription;
+            AllJoynBusAttachment.AboutData.SoftwareVersion = aboutData.SoftwareVersion;
         }
     }
 }

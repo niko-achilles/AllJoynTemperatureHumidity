@@ -23,6 +23,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using TemperatureHumidityControllee;
 using GalaSoft.MvvmLight.Threading;
+using TemperatureHumidityControllee.Views;
 
 namespace TemperatureHumidityControllee
 {

@@ -12,13 +12,14 @@ using Windows.Devices.AllJoyn;
 using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Threading;
 using GalaSoft.MvvmLight;
+using Microsoft.Practices.ServiceLocation;
 
 namespace TemperatureHumidityControllee.Controllees
 {
     public class CurrentTemperatureControllee:ObservableObject, IDisposable
     {
-        private Func<ICurrentTemperatureService> _currentTemperatureServiceProvider;
-        private Func<CurrentTemperatureBusAttachment> _currentTemperatureBusAttachmentProvider;
+
+        private ICurrentTemperatureService _currentTemperatureService;
 
         private AllJoynBusAttachment _currentTemperatureBusAttachment;
         public AllJoynBusAttachment CurrentTemperatureBusAttachment
@@ -52,18 +53,18 @@ namespace TemperatureHumidityControllee.Controllees
             }
         }
 
-        public CurrentTemperatureControllee(Func<CurrentTemperatureBusAttachment> busAttachmentProvider, 
-                                            Func<ICurrentTemperatureService> serviceProvider)
+        public CurrentTemperatureControllee(CurrentTemperatureBusAttachment busAttachment,
+                                            ICurrentTemperatureService service)
         {
 
-            this._currentTemperatureBusAttachmentProvider = busAttachmentProvider;
-            this._currentTemperatureServiceProvider = serviceProvider;
+            this._currentTemperatureBusAttachment = busAttachment.AllJoynBusAttachment;
+            this._currentTemperatureService = service;
 
             Messenger.Default.Register<string>(this, m => this.MessageFromModel(m));
 
             this.InitializeBusAttachment();
             this.InitializeProducer();
-       
+
         }
 
         private void MessageFromModel(string message)
@@ -107,7 +108,9 @@ namespace TemperatureHumidityControllee.Controllees
 
         public void InitializeBusAttachment()
         {
-            this.CurrentTemperatureBusAttachment = this._currentTemperatureBusAttachmentProvider().GetAllJoynBusAttachment();
+            this.CurrentTemperatureBusAttachment = ServiceLocator.Current.GetInstance<CurrentTemperatureBusAttachment>()
+                                                       .AllJoynBusAttachment;
+
             this.CurrentTemperatureBusAttachment.StateChanged += OnCurrentTemperatureBusAttachmentStateChanged;
         }
 
@@ -121,7 +124,7 @@ namespace TemperatureHumidityControllee.Controllees
             //this._currentTemperatureProducer.SessionMemberAdded += OnCurrentTemperatureProducerMemberAdded;
             //this._currentTemperatureProducer.SessionMemberRemoved += OnCurrentTemperatureProducerMemberRemoved;
 
-            this._currentTemperatureProducer.Service = this._currentTemperatureServiceProvider();
+            this._currentTemperatureProducer.Service = this._currentTemperatureService;
 
             
             

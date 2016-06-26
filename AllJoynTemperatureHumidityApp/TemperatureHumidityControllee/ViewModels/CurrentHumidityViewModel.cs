@@ -8,6 +8,7 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
+using Microsoft.Practices.ServiceLocation;
 using System;
 using System.Windows.Input;
 using TemperatureHumidityControllee.Controllees;
@@ -29,7 +30,7 @@ namespace TemperatureHumidityControllee.ViewModels
             private set;
         }
 
-        public INavigationService NavigationService { get; set; }
+        public INavigationService _navigationService;
 
         public CurrentHumidityViewModel(CurrentHumidityControllee currentHumidityControllee,
                                             CurrentHumidity currentHumidityModel)
@@ -40,6 +41,8 @@ namespace TemperatureHumidityControllee.ViewModels
             }
             this.CurrentHumidityControllee = currentHumidityControllee;
             this.CurrentHumidityModel = currentHumidityModel;
+
+            this._navigationService = ServiceLocator.Current.GetInstance<INavigationService>();
         }
 
         private ICommand _startProducerCommand;
@@ -74,7 +77,7 @@ namespace TemperatureHumidityControllee.ViewModels
                 return _goBackCommand ?? (_goBackCommand = new RelayCommand(
                     () =>
                     {
-                        this.NavigationService.GoBack();
+                        this._navigationService.GoBack();
                     }));
             }
         }

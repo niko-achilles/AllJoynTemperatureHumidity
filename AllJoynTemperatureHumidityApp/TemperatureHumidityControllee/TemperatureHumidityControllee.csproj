@@ -98,18 +98,21 @@
     </Compile>
     <Compile Include="BootStrapper.cs" />
     <Compile Include="Controllees\Helpers\AllJoynAboutDataBuilder.cs" />
+    <Compile Include="Controllees\Helpers\AllJoynBusAttachmentFactory.cs" />
     <Compile Include="Controllees\Helpers\AppVersion.cs" />
     <Compile Include="Controllees\Helpers\CurrentHumidityBusAttachment.cs" />
     <Compile Include="Controllees\Helpers\CurrentTemperatureBusAttachment.cs" />
     <Compile Include="Controllees\Helpers\IAboutData.cs" />
     <Compile Include="Controllees\CurrentHumidityControllee.cs" />
-    <Compile Include="CurrentHumidityPage.xaml.cs">
+    <Compile Include="Controllees\Helpers\IConfigureAllJoynBusAttachment.cs" />
+    <Compile Include="Views\CurrentHumidityPage.xaml.cs">
       <DependentUpon>CurrentHumidityPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CurrentTemperaturePage.xaml.cs">
+    <Compile Include="Views\CurrentTemperaturePage.xaml.cs">
       <DependentUpon>CurrentTemperaturePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainPage.xaml.cs">
+    <Compile Include="Design\DesignNavigationService.cs" />
+    <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\CurrentTemperature.cs" />
@@ -146,15 +149,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="CurrentHumidityPage.xaml">
+    <Page Include="Views\CurrentHumidityPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CurrentTemperaturePage.xaml">
+    <Page Include="Views\CurrentTemperaturePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainPage.xaml">
+    <Page Include="Views\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
