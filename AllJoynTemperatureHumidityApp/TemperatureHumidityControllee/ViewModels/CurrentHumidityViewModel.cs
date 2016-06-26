@@ -18,7 +18,11 @@ namespace TemperatureHumidityControllee.ViewModels
 {
     public class CurrentHumidityViewModel : ViewModelBase
     {
-        private CurrentHumidityControllee _currentHumidityControllee;
+        public CurrentHumidityControllee CurrentHumidityControllee
+        {
+            private set;
+            get;
+        }
 
         public CurrentHumidity CurrentHumidityModel
         {
@@ -35,7 +39,7 @@ namespace TemperatureHumidityControllee.ViewModels
             {
                 throw new ArgumentNullException("CurrentHumidityViewModel is depended from CurrentHumidityControllee, CurrentHumidity-Model. Values are null");
             }
-            this._currentHumidityControllee = currentHumidityControllee;
+            this.CurrentHumidityControllee = currentHumidityControllee;
             this.CurrentHumidityModel = currentHumidityModel;
 
             this._navigationService = ServiceLocator.Current.GetInstance<INavigationService>();
@@ -53,7 +57,7 @@ namespace TemperatureHumidityControllee.ViewModels
             {
                 return _startProducerCommand ?? new RelayCommand(() =>
                 {
-                    this._currentHumidityControllee.StartCurrentHumidityProducer();
+                    this.CurrentHumidityControllee.StartCurrentHumidityProducer();
                 });
             }
         }
@@ -65,7 +69,7 @@ namespace TemperatureHumidityControllee.ViewModels
             {
                 return _stopProducer ?? new RelayCommand(() =>
                 {
-                    this._currentHumidityControllee.StopCurrentHumidityProducer();
+                    this.CurrentHumidityControllee.StopCurrentHumidityProducer();
                 });
             }
         }

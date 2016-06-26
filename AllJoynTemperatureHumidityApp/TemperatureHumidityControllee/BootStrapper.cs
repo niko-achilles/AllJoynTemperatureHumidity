@@ -20,6 +20,7 @@ using Microsoft.Practices.ServiceLocation;
 using GalaSoft.MvvmLight;
 using TemperatureHumidityControllee.Design;
 using TemperatureHumidityControllee.Views;
+using System.Collections.Generic;
 
 namespace TemperatureHumidityControllee
 {
@@ -99,6 +100,8 @@ namespace TemperatureHumidityControllee
                   .WithSoftwareVersion(AppVersion.GetAppVersion())
                   .Build() as IAboutData;
             };
+
+
 
 
             SimpleIoc.Default.Register<CurrentTemperatureBusAttachment>(() => AllJoynBusAttachmentFactory
