@@ -5,6 +5,7 @@
 // <web>http://nikolaoskokkinos.wordpress.com/</web> 
 // **************************************************************************** 
 
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using Microsoft.Practices.ServiceLocation;
@@ -15,10 +16,8 @@ using TemperatureHumidityControllee.Models;
 
 namespace TemperatureHumidityControllee.ViewModels
 {
-    public class MainViewModel
+    public class MainViewModel:ViewModelBase
     {
-        //public CurrentTemperatureViewModel CurrentTemperatureViewModel { get; private set; }
-        //public CurrentHumidityViewModel CurrentHumidityViewModel { get; private set; }
 
         public ObservableCollection<DeviceItem> Items
         {
@@ -46,6 +45,10 @@ namespace TemperatureHumidityControllee.ViewModels
                 Items.Add(new DeviceItem(item));
             }
 
+            if (IsInDesignMode)
+            {
+                //
+            }
         }
 
         private RelayCommand<DeviceItem> _showDetailsCommand;

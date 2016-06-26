@@ -19,11 +19,7 @@ namespace TemperatureHumidityControllee.ViewModels
     public class CurrentTemperatureViewModel:ViewModelBase
     {
 
-        public CurrentTemperatureControllee CurrentTemepratureControllee
-        {
-            get;
-            private set;
-        }
+        private CurrentTemperatureControllee _currentTemepratureControllee;
 
         public CurrentTemperature CurrentTemepratureModel
         {
@@ -40,10 +36,15 @@ namespace TemperatureHumidityControllee.ViewModels
             {
                 throw new ArgumentNullException("CurrentTemperatureViewModel is depended from CurrentTemperatureControllee, CurrentTemperature-Model. Values are null");
             }
-            this.CurrentTemepratureControllee = currentTemperatureControllee;
+            this._currentTemepratureControllee = currentTemperatureControllee;
             this.CurrentTemepratureModel = currentTemperatureModel;
 
             this._navigationService = ServiceLocator.Current.GetInstance<INavigationService>();
+
+            if (IsInDesignMode)
+            {
+                //
+            }
         }
 
         private ICommand _startProducerCommand;
@@ -53,7 +54,7 @@ namespace TemperatureHumidityControllee.ViewModels
             {
                 return _startProducerCommand ?? new RelayCommand(()=>
                 {
-                    this.CurrentTemepratureControllee.StartCurrentTemperatureProducer();
+                    this._currentTemepratureControllee.StartCurrentTemperatureProducer();
                 }); 
             }
         }
@@ -65,7 +66,7 @@ namespace TemperatureHumidityControllee.ViewModels
             {
                 return _stopProducer ?? new RelayCommand(()=> 
                 {
-                    this.CurrentTemepratureControllee.StopCurrentTemperatureProducer();
+                    this._currentTemepratureControllee.StopCurrentTemperatureProducer();
                 });
             }
         }
