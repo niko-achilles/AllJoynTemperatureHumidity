@@ -107,6 +107,9 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataItem.cs" />
+    <Compile Include="DataItemChangedEventArgs.cs" />
+    <Compile Include="EnvironmentDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\DhtSensorLibrary.rd.xml" />
   </ItemGroup>
