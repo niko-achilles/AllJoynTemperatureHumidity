@@ -35,22 +35,22 @@ namespace DhtSensorLibrary
             _dhtSensor = sensorProvider();
         }
 
-        public void AttachSensorDht11()
+        public void AttachSensorDht11(int pinNumber)
         {
             if (this._dhtSensor !=null)
             {
                 throw new InvalidOperationException("Envirmoent Data Manageer has already a sensor attached");
             }
-            _dhtSensor = new Dht11(GpioController.GetDefault().OpenPin(4, GpioSharingMode.Exclusive), GpioPinDriveMode.Input);
+            _dhtSensor = new Dht11(GpioController.GetDefault().OpenPin(pinNumber, GpioSharingMode.Exclusive), GpioPinDriveMode.Input);
         }
 
-        public void AttachSensorDht22()
+        public void AttachSensorDht22(int pinNumber)
         {
             if (this._dhtSensor != null)
             {
                 throw new InvalidOperationException("Enviroment Data Manager has already a sensor attached");
             }
-            _dhtSensor = new Dht22(GpioController.GetDefault().OpenPin(4, GpioSharingMode.Exclusive), GpioPinDriveMode.Input);
+            _dhtSensor = new Dht22(GpioController.GetDefault().OpenPin(pinNumber, GpioSharingMode.Exclusive), GpioPinDriveMode.Input);
         }
 
         public void StopReading()

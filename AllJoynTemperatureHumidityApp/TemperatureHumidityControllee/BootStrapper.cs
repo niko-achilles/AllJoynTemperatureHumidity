@@ -63,7 +63,11 @@ namespace TemperatureHumidityControllee
 
                 //temporary register the fake sensor
                 var envManager = new EnvironmentDataManager();
-                envManager.AttachFakeSensor(() => new FakeSensor());
+                //envManager.AttachFakeSensor(() => new FakeSensor());
+
+
+                //register real sensor
+                envManager.AttachSensorDht11(4);
 
                 SimpleIoc.Default.Register<EnvironmentDataManager>(() => envManager);
 
