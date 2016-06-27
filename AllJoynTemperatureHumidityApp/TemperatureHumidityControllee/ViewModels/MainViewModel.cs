@@ -13,11 +13,16 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using TemperatureHumidityControllee.Controllees.Helpers;
 using TemperatureHumidityControllee.Models;
+using DhtSensorLibrary;
+using System.Windows.Input;
 
 namespace TemperatureHumidityControllee.ViewModels
 {
     public class MainViewModel:ViewModelBase
     {
+
+        public CurrentTemperatureViewModel CurrentTemperatureViewModel { get; set; }
+        public CurrentHumidityViewModel CurrentHumidityViewModel { get; set; }
 
         public ObservableCollection<DeviceItem> Items
         {
@@ -25,7 +30,9 @@ namespace TemperatureHumidityControllee.ViewModels
             get;
         }
 
-        public INavigationService _navigationService;
+        public EnvironmentDataManager _environmentDataManager; 
+
+        private INavigationService _navigationService;
 
         public MainViewModel(INavigationService navService)
         {
@@ -37,19 +44,48 @@ namespace TemperatureHumidityControllee.ViewModels
 
             this._navigationService = navService;
 
-           
-            Items = new ObservableCollection<DeviceItem>();
+            this._environmentDataManager = ServiceLocator.Current.GetInstance<EnvironmentDataManager>();
 
-            foreach (var item in ServiceLocator.Current.GetAllInstances<IAboutData>())
-            {
-                Items.Add(new DeviceItem(item));
-            }
+            this.CurrentHumidityViewModel = ServiceLocator.Current.GetInstance<CurrentHumidityViewModel>();
+            this.CurrentTemperatureViewModel = ServiceLocator.Current.GetInstance<CurrentTemperatureViewModel>();
+
+            Items = new ObservableCollection<DeviceItem> {
+            new DeviceItem(this.CurrentTemperatureViewModel.CurrentTemepratureControllee.CurrentTemperatureBusAttachment.AboutData),
+            new DeviceItem(this.CurrentHumidityViewModel.CurrentHumidityControllee.CurrentHumidityBusAttachment.AboutData)
+            };
+
 
             if (IsInDesignMode)
             {
                 //
             }
         }
+
+        private RelayCommand _startReadingCommand;
+        public RelayCommand StartReadingCommand
+        {
+            get
+            {
+                return _startReadingCommand ?? (_startReadingCommand = new RelayCommand(() => 
+                {
+                    this._environmentDataManager.StartReading();
+                }));
+            }
+        }
+
+        private RelayCommand _stopReadingCommand;
+        public RelayCommand StopReadingCommand
+        {
+            get
+            {
+                return _stopReadingCommand ?? (_stopReadingCommand = new RelayCommand(() =>
+                {
+                    this._environmentDataManager.StopReading();
+                }));
+            }
+        }
+
+        
 
         private RelayCommand<DeviceItem> _showDetailsCommand;
         public RelayCommand<DeviceItem> ShowDetailsCommand

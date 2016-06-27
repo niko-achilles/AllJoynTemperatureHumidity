@@ -1,8 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// ****************************************************************************
+// <author>Nikolaos Kokkinos</author> 
+// <email>nik.kokkinos@windowslive.com</email> 
+// <date>22.06.2016</date>  
+// <web>http://nikolaoskokkinos.wordpress.com/</web> 
+// **************************************************************************** 
+
+using System;
 using Windows.UI.Xaml;
 using Sensors.Dht;
 using Windows.Devices.Gpio;
@@ -11,62 +14,80 @@ namespace DhtSensorLibrary
 {
     public class EnvironmentDataManager
     {
-        private DispatcherTimer _timer = new DispatcherTimer();
-        GpioPin _pin4 = null;
-        Dht11 _dht1;
+
+        private DispatcherTimer _timer;
+
+        private IDht _dhtSensor;
 
         public event EventHandler<DataItemChangedEventArgs> DataItemChanged;
+
         public EnvironmentDataManager()
         {
-            this._pin4 = GpioController.GetDefault().OpenPin(4, GpioSharingMode.Exclusive);
-            this._dht1 = new Dht11(_pin4, GpioPinDriveMode.Input);
+                
+        }
+
+        public void AttachFakeSensor(Func<IDht> sensorProvider)
+        {
+            if (this._dhtSensor != null)
+            {
+                throw new InvalidOperationException("Envirmoent Data Manageer has already a sensor attached");
+            }
+            _dhtSensor = sensorProvider();
+        }
+
+        public void AttachSensorDht11()
+        {
+            if (this._dhtSensor !=null)
+            {
+                throw new InvalidOperationException("Envirmoent Data Manageer has already a sensor attached");
+            }
+            _dhtSensor = new Dht11(GpioController.GetDefault().OpenPin(4, GpioSharingMode.Exclusive), GpioPinDriveMode.Input);
+        }
+
+        public void AttachSensorDht22()
+        {
+            if (this._dhtSensor != null)
+            {
+                throw new InvalidOperationException("Enviroment Data Manager has already a sensor attached");
+            }
+            _dhtSensor = new Dht22(GpioController.GetDefault().OpenPin(4, GpioSharingMode.Exclusive), GpioPinDriveMode.Input);
         }
 
         public void StopReading()
         {
             _timer.Stop();
 
-            _pin4.Dispose();
-            _pin4 = null;
+            var disposableSensor = (IDisposable)_dhtSensor;
+            disposableSensor.Dispose();
+            disposableSensor = null;
 
-            _dht1 = null;
         }
 
         public void StartReading()
         {
+            _timer = new DispatcherTimer();
             _timer.Interval = TimeSpan.FromSeconds(20);
             _timer.Tick += _timer_Tick;
             _timer.Start();
         }
 
-        public int TotalAttempts { get; private set; }
-        decimal Temperature;
-        decimal Humidity;
-        DateTimeOffset LastUpdated;
-
-
         private async void _timer_Tick(object sender, object e)
         {
             DhtReading reading = new DhtReading();
-            int val = this.TotalAttempts;
-            this.TotalAttempts++;
 
-            reading = await _dht1.GetReadingAsync(30).AsTask();
-
-            //_retryCount.Add(reading.RetryCount);
-
-            if (reading.IsValid)
+            if (_dhtSensor !=null)
             {
-                //this.TotalSuccess++;
-                this.Temperature = Convert.ToDecimal(reading.Temperature);
-                this.Humidity = Convert.ToDecimal(reading.Humidity);
-                this.LastUpdated = DateTimeOffset.Now;
-                //this.OnPropertyChanged(nameof(SuccessRate));
-                DataItem myItem = new DataItem(0, new Guid(), DateTime.Now, (decimal)reading.Temperature, (decimal)reading.Humidity);
-                //itemList.Add(myItem);
+                reading = await _dhtSensor.GetReadingAsync(30).AsTask();
 
-                this.OnDataItemChanged(myItem);
+                if (reading.IsValid)
+                {
+
+                    DataItem myItem = new DataItem(0, new Guid(), DateTimeOffset.Now, reading.Temperature, reading.Humidity);
+
+                    this.OnDataItemChanged(myItem);
+                }
             }
+            
         }
 
         private void OnDataItemChanged(DataItem item)

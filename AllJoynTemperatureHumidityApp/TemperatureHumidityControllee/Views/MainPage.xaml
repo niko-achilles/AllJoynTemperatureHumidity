@@ -18,7 +18,10 @@
         <Grid Background="Purple">
             <TextBlock Text="AllJoyn Apps" RequestedTheme="Dark" Margin="60,25,50,25" Style="{StaticResource HeaderTextBlockStyle}"></TextBlock>
         </Grid>
-        <GridView Grid.Row="1" IsItemClickEnabled="True"
+        <StackPanel Orientation="Vertical" Grid.Row="1">
+            <Button Width="200" Content="Start Reading from Sensor" Command="{Binding StartReadingCommand}"></Button>
+            <Button Width="200" Content="Stop Reading from Sensor" Command="{Binding StopReadingCommand}"></Button>
+        <GridView  IsItemClickEnabled="True"
                   ItemsSource="{Binding Items}" Padding="50">
             <GridView.ItemTemplate>
                 <DataTemplate>
@@ -47,6 +50,6 @@
             </GridView.ItemTemplate>
 
         </GridView>
-
+        </StackPanel>
     </Grid>
 </Page>

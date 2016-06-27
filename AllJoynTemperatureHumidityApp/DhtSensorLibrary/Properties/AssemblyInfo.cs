@@ -1,4 +1,11 @@
-﻿using System.Reflection;
+﻿// ****************************************************************************
+// <author>Nikolaos Kokkinos</author> 
+// <email>nik.kokkinos@windowslive.com</email> 
+// <date>22.06.2016</date>  
+// <web>http://nikolaoskokkinos.wordpress.com/</web> 
+// **************************************************************************** 
+
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -8,7 +15,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("DhtSensorLibrary")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Nikolaos Kokkinos")]
 [assembly: AssemblyProduct("DhtSensorLibrary")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]

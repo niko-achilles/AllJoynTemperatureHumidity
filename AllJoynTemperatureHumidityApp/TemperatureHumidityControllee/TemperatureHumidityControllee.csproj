@@ -105,6 +105,7 @@
     <Compile Include="Controllees\Helpers\IAboutData.cs" />
     <Compile Include="Controllees\CurrentHumidityControllee.cs" />
     <Compile Include="Controllees\Helpers\IConfigureAllJoynBusAttachment.cs" />
+    <Compile Include="Services\Sensor\FakeSensor.cs" />
     <Compile Include="Views\CurrentHumidityPage.xaml.cs">
       <DependentUpon>CurrentHumidityPage.xaml</DependentUpon>
     </Compile>
@@ -163,6 +164,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DhtSensorLibrary\DhtSensorLibrary.csproj">
+      <Project>{c22f9380-22e5-4e0d-972e-46500fc82ca2}</Project>
+      <Name>DhtSensorLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\org.alljoyn.SmartSpaces.Environment.CurrentHumidity\org.alljoyn.SmartSpaces.Environment.CurrentHumidity.vcxproj">
       <Project>{4DF6EB0B-D359-47A0-8390-549400AA0D66}</Project>
       <Name>org.alljoyn.SmartSpaces.Environment.CurrentHumidity</Name>
@@ -172,13 +177,16 @@
       <Name>org.alljoyn.SmartSpaces.Environment.CurrentTemperature</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\Sensor\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
       <Name>Behaviors SDK %28XAML%29</Name>
     </SDKReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Sensors.Dht">
+      <HintPath>..\Debug\Sensors.Dht\Sensors.Dht.winmd</HintPath>
+    </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

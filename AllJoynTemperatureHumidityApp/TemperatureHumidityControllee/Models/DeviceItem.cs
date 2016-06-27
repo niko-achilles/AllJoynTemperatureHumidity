@@ -5,7 +5,6 @@
 // <web>http://nikolaoskokkinos.wordpress.com/</web> 
 // **************************************************************************** 
 
-using TemperatureHumidityControllee.Controllees.Helpers;
 using Windows.Devices.AllJoyn;
 
 namespace TemperatureHumidityControllee.Models
@@ -16,9 +15,9 @@ namespace TemperatureHumidityControllee.Models
         public string Manufacturer { get; set; }
         public string ModelNumber { get; set; }
 
-        public IAboutData AboutData;
+        public AllJoynAboutData AboutData;
 
-        public DeviceItem(IAboutData aboutData)
+        public DeviceItem(AllJoynAboutData aboutData)
         {
             this.AboutData = aboutData;
 

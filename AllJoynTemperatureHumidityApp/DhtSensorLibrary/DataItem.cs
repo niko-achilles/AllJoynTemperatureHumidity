@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 
 namespace DhtSensorLibrary
 {
@@ -6,10 +7,10 @@ namespace DhtSensorLibrary
     {
         public Guid sensorID { get; set; }
         public DateTimeOffset captureTime { get; set; }
-        public decimal temperature { get; set; }
-        public decimal humidity { get; set; }
+        public double temperature { get; set; }
+        public double humidity { get; set; }
         public int ID { get; set; }
-        public DataItem(int ID, Guid sensorID, DateTimeOffset captureTime, decimal temperature, decimal humidity)
+        public DataItem(int ID, Guid sensorID, DateTimeOffset captureTime, double temperature, double humidity)
         {
             this.ID = ID;
             this.sensorID = sensorID;

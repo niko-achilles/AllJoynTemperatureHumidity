@@ -57,13 +57,14 @@ namespace TemperatureHumidityControllee.Controllees
         public CurrentHumidityControllee(ICurrentHumidityService service)
         {
 
-            //this.CurrentHumidityBusAttachment = busAttachment.AllJoynBusAttachment;
             this._currentHumidityService = service;
 
-            Messenger.Default.Register<string>(this, m => this.MessageFromModel(m));
+            
 
             this.InitializeBusAttachment();
             this.InitializeProducer();
+
+            Messenger.Default.Register<string>(this, m => this.MessageFromModel(m));
 
         }
 
@@ -71,10 +72,14 @@ namespace TemperatureHumidityControllee.Controllees
 
         private void MessageFromModel(string message)
         {
-            if (message == "CurrentValue")
+            if (this._currentHumidityProducer!=null && this._currentHumidityBusAttachmentState == "Connected")
             {
-                this._currentHumidityProducer.EmitCurrentValueChanged();
+                if (message == "CurrentValue")
+                {
+                    this._currentHumidityProducer.EmitCurrentValueChanged();
+                }
             }
+            
           
         }
 

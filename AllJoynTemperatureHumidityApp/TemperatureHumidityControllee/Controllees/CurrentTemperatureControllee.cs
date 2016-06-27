@@ -60,28 +60,34 @@ namespace TemperatureHumidityControllee.Controllees
             this._currentTemperatureBusAttachment = busAttachment.AllJoynBusAttachment;
             this._currentTemperatureService = service;
 
-            Messenger.Default.Register<string>(this, m => this.MessageFromModel(m));
+            
 
             this.InitializeBusAttachment();
             this.InitializeProducer();
+
+            Messenger.Default.Register<string>(this, m => this.MessageFromModel(m));
 
         }
 
         private void MessageFromModel(string message)
         {
-            if (message == "CurrentValue")
+            if (this._currentTemperatureProducer!=null && this._currentTemperatureBusAttachmentState == "Connected")
             {
-                this._currentTemperatureProducer.EmitCurrentValueChanged();
-            }
-            if (message == "Precision")
-            {
-                this._currentTemperatureProducer.EmitUpdateMinTimeChanged();
-            }
+                if (message == "CurrentValue")
+                {
+                    this._currentTemperatureProducer.EmitCurrentValueChanged();
+                }
+                if (message == "Precision")
+                {
+                    this._currentTemperatureProducer.EmitUpdateMinTimeChanged();
+                }
 
-            if (message == "UpdateMinTime")
-            {
-                this._currentTemperatureProducer.EmitUpdateMinTimeChanged();
+                if (message == "UpdateMinTime")
+                {
+                    this._currentTemperatureProducer.EmitUpdateMinTimeChanged();
+                }
             }
+           
         }
 
        

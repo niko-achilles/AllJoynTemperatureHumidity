@@ -25,8 +25,10 @@ namespace TemperatureHumidityControllee.Models
                 {
                     _currentValue = value;
                     RaisePropertyChanged(()=>CurrentValue);
-                    Messenger.Default.Send(nameof(CurrentValue));
+                    
                 }
+
+                Messenger.Default.Send("CurrentValue");
             }
         }
 
@@ -43,7 +45,7 @@ namespace TemperatureHumidityControllee.Models
                 {
                     _precision = value;
                     RaisePropertyChanged(()=>Precision);
-                    Messenger.Default.Send(nameof(Precision));
+                    //Messenger.Default.Send(nameof(Precision));
                 }
             }
         }
@@ -61,7 +63,7 @@ namespace TemperatureHumidityControllee.Models
                 {
                     _updateMinTime = value;
                     RaisePropertyChanged(() => UpdateMinTime);
-                    Messenger.Default.Send(nameof(UpdateMinTime));
+                    //Messenger.Default.Send(nameof(UpdateMinTime));
                 }
             }
         }
@@ -79,7 +81,7 @@ namespace TemperatureHumidityControllee.Models
                 {
                     _version = value;
                     RaisePropertyChanged(()=>Version);
-                    Messenger.Default.Send(nameof(Version));
+                    //Messenger.Default.Send(nameof(Version));
                 }
             }
         }

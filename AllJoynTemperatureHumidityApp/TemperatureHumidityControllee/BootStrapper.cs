@@ -21,32 +21,19 @@ using GalaSoft.MvvmLight;
 using TemperatureHumidityControllee.Design;
 using TemperatureHumidityControllee.Views;
 using System.Collections.Generic;
+using DhtSensorLibrary;
+using TemperatureHumidityControllee.Services.Sensor;
 
 namespace TemperatureHumidityControllee
 {
     public class BootStrapper
     {
-        public CurrentTemperatureViewModel CurrentTemperatureViewModel
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<CurrentTemperatureViewModel>();
-            }
-        }
 
         public MainViewModel MainViewModel
         {
             get
             {
                 return ServiceLocator.Current.GetInstance<MainViewModel>();
-            }
-        }
-
-        public CurrentHumidityViewModel CurrentHumidityViewModel
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<CurrentHumidityViewModel>();
             }
         }
 
@@ -59,6 +46,12 @@ namespace TemperatureHumidityControllee
             {
                 SimpleIoc.Default.Register<INavigationService, DesignNavigationService>();
                 //regiter here other service that provide data and need to be mocked
+
+                var envManager = new EnvironmentDataManager();
+                envManager.AttachFakeSensor(() => new FakeSensor());
+
+                SimpleIoc.Default.Register<EnvironmentDataManager>(() => envManager);
+
             }
             else
             {
@@ -67,6 +60,13 @@ namespace TemperatureHumidityControllee
                 nav.Configure("CurrentTemperaturePage", typeof(CurrentTemperaturePage));
 
                 SimpleIoc.Default.Register<INavigationService>(() => nav);
+
+                //temporary register the fake sensor
+                var envManager = new EnvironmentDataManager();
+                envManager.AttachFakeSensor(() => new FakeSensor());
+
+                SimpleIoc.Default.Register<EnvironmentDataManager>(() => envManager);
+
 
                 //register here the real implementation of service that have been mocked above in the if statement = true
             }
@@ -118,10 +118,10 @@ namespace TemperatureHumidityControllee
 
             SimpleIoc.Default.Register<CurrentTemperatureViewModel>();
             SimpleIoc.Default.Register<CurrentHumidityViewModel>();
-
-            SimpleIoc.Default.Register<IAboutData>(() => ajCurrentHumidityAboutData(), "HumidityAboutData");
-            SimpleIoc.Default.Register<IAboutData>(() => ajCurrentTemperatureAboutData(), "TemperatureAboutData");
             SimpleIoc.Default.Register<MainViewModel>();
+
+            
+
         }
 
     }

@@ -5,6 +5,7 @@
 // <web>http://nikolaoskokkinos.wordpress.com/</web> 
 // **************************************************************************** 
 
+using DhtSensorLibrary;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
@@ -30,7 +31,7 @@ namespace TemperatureHumidityControllee.ViewModels
             private set;
         }
 
-        public INavigationService _navigationService;
+        private INavigationService _navigationService;
 
         public CurrentHumidityViewModel(CurrentHumidityControllee currentHumidityControllee,
                                             CurrentHumidity currentHumidityModel)
@@ -48,6 +49,15 @@ namespace TemperatureHumidityControllee.ViewModels
             {
                 //
             }
+
+            this._environmentDataManager = ServiceLocator.Current.GetInstance<EnvironmentDataManager>();
+            this._environmentDataManager.DataItemChanged += OnSensorDataItemChanged;
+
+        }
+
+        private void OnSensorDataItemChanged(object sender, DataItemChangedEventArgs e)
+        {
+            this.CurrentHumidityModel.CurrentValue = (byte)e.Item.humidity;
         }
 
         private ICommand _startProducerCommand;
@@ -75,6 +85,8 @@ namespace TemperatureHumidityControllee.ViewModels
         }
 
         private ICommand _goBackCommand;
+        private EnvironmentDataManager _environmentDataManager;
+
         public ICommand GoBackCommand
         {
             get
