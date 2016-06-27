@@ -21,8 +21,8 @@ namespace TemperatureHumidityControllee.ViewModels
     public class MainViewModel:ViewModelBase
     {
 
-        public CurrentTemperatureViewModel CurrentTemperatureViewModel { get; set; }
-        public CurrentHumidityViewModel CurrentHumidityViewModel { get; set; }
+        public CurrentTemperatureViewModel CurrentTemperatureViewModel { get; private set; }
+        public CurrentHumidityViewModel CurrentHumidityViewModel { get; private set; }
 
         public ObservableCollection<DeviceItem> Items
         {
